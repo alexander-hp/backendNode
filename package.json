@@ -1,0 +1,21 @@
+{
+  "name": "backendnode",
+  "version": "1.0.0",
+  "description": "Replica de chat como Telegram",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "telegram",
+    "server",
+    "node",
+    "server"
+  ],
+  "author": "Alexander Hernandez P",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
