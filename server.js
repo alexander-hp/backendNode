@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 var app = express();
-
+// ? router
 app.use(router);
 
 app.use('/', function (req, res) {
