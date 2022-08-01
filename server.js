@@ -2,8 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const router = require('./network/routes');
+const db = require('./db');
 
 var app = express();
+
+// * haciendo la conexion a BD una sola vez
+db(
+  'mongodb+srv://Alexander:Hezr781209*@cluster0.jzbqk.mongodb.net/?retryWrites=true&w=majority'
+);
 
 //* los tipos de body que podremos visualizar
 app.use(bodyParser.json());

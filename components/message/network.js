@@ -6,8 +6,12 @@ const store = require('./store');
 const router = express.Router();
 
 router.get('/', (req, res) => {
+  // ? variable donde asignamos el query tenga o no
+  const filterMessage = req.query.user || null;
+  console.log(filterMessage);
+  // ? pasamos el query al controller "filterMessage"
   controller
-    .getMessages()
+    .getMessages(filterMessage)
     .then((messageList) => {
       response.succes(req, res, messageList, 200);
     })
@@ -40,11 +44,31 @@ router.post('/', (req, res) => {
     });
 });
 
-router.delete('/', (req, res) => {
-  console.log('Query: ', req.query);
-  console.log('Body: ', req.body);
-  res.send(req.body.text + ' eliminado exitosamente');
-  // res.send('Respuesta desde tipo delete');
+// ? patch "modificaciones parciales", :id "variable para que nos pasen el id"
+router.patch('/:id', function (req, res) {
+  // ? imprimimos el id que nos pasan en los parametros
+  console.log(req.params.id);
+  console.log(req.body.message);
+  controller
+    .updateMessage(req.params.id, req.body.message)
+    .then((data) => {
+      response.succes(req, res, data, 200);
+    })
+    .catch((e) => {
+      response.error(req, res, 'Error interno', 500, e);
+    });
+});
+
+// ? eliminando mensajes
+router.delete('/:id', (req, res) => {
+  controller
+    .deleteMessage(req.params.id)
+    .then(() => {
+      response.succes(req, res, `Mensaje: ${req.params.id} eliminado`, 200);
+    })
+    .catch((e) => {
+      response.error(req, res, 'Error interno', 500, e);
+    });
 });
 
 module.exports = router;

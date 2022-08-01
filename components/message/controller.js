@@ -20,9 +20,39 @@ function addMessage(user, message) {
   });
 }
 
-function getMessages() {
+function getMessages(filterMessage) {
   return new Promise((resolve, reject) => {
-    resolve(store.list());
+    resolve(store.list(filterMessage));
+  });
+}
+
+function updateMessage(id, message) {
+  return new Promise(async (resolve, reject) => {
+    if (!id || !message) {
+      console.error('[messageController] No hay mensaje');
+      reject('Los datos son incorrectos');
+      return false;
+    } else {
+      const result = await store.updateText(id, message);
+      resolve(result);
+    }
+  });
+}
+
+function deleteMessage(id) {
+  return new Promise((resolve, reject) => {
+    if (!id) {
+      reject('id invalido');
+      return false;
+    }
+    store
+      .remove(id)
+      .then(() => {
+        resolve(store.remove(id));
+      })
+      .catch((e) => {
+        reject(e);
+      });
   });
 }
 
@@ -30,4 +60,6 @@ function getMessages() {
 module.exports = {
   addMessage,
   getMessages,
+  updateMessage,
+  deleteMessage,
 };
