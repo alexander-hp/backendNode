@@ -24,4 +24,4 @@ router(app);
 app.use('/app', express.static('public'));
 
 app.listen(3000);
-console.log('aplicacion correidno en el puerto 3000');
+console.log('aplicacion corriendo en el puerto 3000');

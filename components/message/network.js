@@ -1,9 +1,16 @@
 const express = require('express');
+const multer = require('multer');
+
 const response = require('../../network/response');
 const controller = require('../../components/message/controller');
 const store = require('./store');
 
 const router = express.Router();
+
+// *Ruta donde guardaremos los archivos
+const upload = multer({
+  dest: 'public/files/',
+});
 
 router.get('/', (req, res) => {
   // ? variable donde asignamos el query tenga o no
@@ -20,7 +27,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', upload.single('file'), (req, res) => {
+  // * Propiedades del archivo
+  console.log(req.file);
   /*
   ? Llammamos a la funcion addMessage de controller, le pasamos
   ? por parametros EL USER y Message que nos da el front-end
@@ -28,7 +37,7 @@ router.post('/', (req, res) => {
   ? acceder a then() si es que todo sale bien y catch() si hay error
     */
   controller
-    .addMessage(req.body.user, req.body.message)
+    .addMessage(req.body.chat, req.body.user, req.body.message, req.file)
     .then((fullMessage) => {
       store.add(fullMessage);
       response.succes(req, res, fullMessage, 201);

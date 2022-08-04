@@ -16,17 +16,32 @@ async function getMessage(filterUser) {
   // * Local
   // return list;
   // * Online
-  // ? hacemos un objeto donde pondremos los filtros para las busquedas, si tiene
-  let filter = {};
-  if (filterUser !== null) {
-    // ? agregamos al objeto y la variable que contiene el query
-    // filter = { user: filterUser };
-    // ? en este hacemos que no importe si el query esta en minusculas o may.
-    filter = { user: new RegExp(`${filterUser}`, 'i') };
-  }
-  // ? aqui busca en mongodb ya con el filtro si es que tiene o no
-  const messages = await Model.find(filter);
-  return messages;
+  return new Promise((resolve, reject) => {
+    // ? hacemos un objeto donde pondremos los filtros para las busquedas, si tiene
+    let filter = {};
+    if (filterUser !== null) {
+      // ? agregamos al objeto y la variable que contiene el query
+      // filter = { user: filterUser };
+      // ? en este hacemos que no importe si el query esta en minusculas o may.
+      filter = { user: new RegExp(`${filterUser}`, 'i') };
+    }
+    // ? aqui busca en mongodb ya con el filtro si es que tiene o no
+    /* 
+    ? populated hace que busquemos en la bd en este caso el id del usuario
+    ? si es que esta y nos traiga la informacion del usuario, para funcionar
+    ? tiene que llamarse a exec y ahi es donde devolvemos la info o rechazamos
+    ? si es que tiene error    
+    */
+    Model.find(filter)
+      .populate('user')
+      .exec((error, populated) => {
+        if (error) {
+          reject(error);
+          return false;
+        }
+        resolve(populated);
+      });
+  });
 }
 
 async function updateText(id, message) {
