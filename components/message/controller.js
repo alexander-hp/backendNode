@@ -1,5 +1,5 @@
 // TODO se encargara de decir todo lo que sucede y las funciones necesarias
-
+const socket = require('../../socket').socket;
 const store = require('./store');
 
 function addMessage(chat, user, message, file) {
@@ -20,6 +20,9 @@ function addMessage(chat, user, message, file) {
         date: new Date(),
         file: fileUrl,
       };
+
+      store.add(fullMessage);
+      socket.io.emit('message', fullMessage);
       console.log(fullMessage);
       resolve(fullMessage);
     }

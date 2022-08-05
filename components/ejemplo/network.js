@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   // * leyendo cabaceras o headers
-  // console.log('Headers: ', req.headers);
+  console.log('Headers: ', req.headers.auth);
   res.header({
     'custom-header': 'Nuestro Valor Personalizado',
   });
